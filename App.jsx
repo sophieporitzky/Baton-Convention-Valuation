@@ -656,6 +656,7 @@ function CurrencyInput({ value, onChange, placeholder, label, required, error })
 function WelcomeScreen({ onStart }) {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
+  const [phone, setPhone] = useState("");
   const [errors, setErrors] = useState({});
   
   const handleStart = () => {
@@ -666,7 +667,7 @@ function WelcomeScreen({ onStart }) {
     
     setErrors(newErrors);
     if (Object.keys(newErrors).length === 0) {
-      onStart({ ownerName: name.trim(), email: email.trim() });
+      onStart({ ownerName: name.trim(), email: email.trim(), phone: phone.trim() });
     }
   };
   
@@ -712,6 +713,19 @@ function WelcomeScreen({ onStart }) {
               placeholder="john@business.com"
             />
             {errors.email && <p className="text-xs text-red-400 mt-1">{errors.email}</p>}
+          </div>
+          
+          <div className="text-left">
+            <label className="text-sm font-medium text-gray-400 block mb-2">
+              Phone Number <span className="text-gray-600 text-xs font-normal">(optional)</span>
+            </label>
+            <input
+              type="tel"
+              value={phone}
+              onChange={(e) => setPhone(e.target.value)}
+              className="w-full bg-white/10 border border-white/20 rounded-lg px-4 py-3 text-white placeholder-gray-500 focus:outline-none focus:border-teal-400 focus:ring-2 focus:ring-teal-400/20"
+              placeholder="(555) 123-4567"
+            />
           </div>
         </div>
         
