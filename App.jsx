@@ -539,8 +539,10 @@ async function sendToZapier(submission) {
       date: submission.date || new Date().toLocaleDateString(),
       name: s.ownerName || "",
       email: s.email || "",
+      phone: s.phone || "",
       businessName: s.businessName || "",
       website: s.website || "",
+      stage: "Valuation Complete",
       industry: s.subIndustry || "",
       ownerSalary: s.ownerSalary || 0,
       expectedValue: s.expectedValue || 0,
@@ -754,6 +756,7 @@ function SurveyForm({ onComplete, initialData }) {
   const defaults = {
     ownerName: "",
     email: "",
+    phone: "",
     businessName: "",
     website: "",
     industry: "Construction / Trades",
@@ -2081,6 +2084,19 @@ export default function ConventionValuationApp() {
   const handleWelcomeComplete = (data) => {
     setWelcomeData(data);
     setStep("survey");
+    
+    // Send lead capture to Zapier (fire and forget)
+    fetch(ZAPIER_WEBHOOK_URL, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        date: new Date().toLocaleDateString(),
+        name: data.ownerName || "",
+        email: data.email || "",
+        phone: data.phone || "",
+        stage: "Lead - Started"
+      })
+    }).catch(e => console.warn("Welcome webhook failed:", e));
   };
   
   // Handle survey completion
@@ -2164,7 +2180,7 @@ export default function ConventionValuationApp() {
       {step === "survey" && (
         <SurveyForm 
           onComplete={handleSurveyComplete} 
-          initialData={surveyData ? surveyData : welcomeData ? { ownerName: welcomeData.ownerName, email: welcomeData.email } : null} 
+          initialData={surveyData ? surveyData : welcomeData ? { ownerName: welcomeData.ownerName, email: welcomeData.email, phone: welcomeData.phone } : null} 
         />
       )}
       
