@@ -2085,18 +2085,6 @@ export default function ConventionValuationApp() {
     setWelcomeData(data);
     setStep("survey");
     
-    // Send lead capture to Zapier (fire and forget)
-    fetch(ZAPIER_WEBHOOK_URL, {
-      method: "POST",
-      headers: { "Content-Type": "application/x-www-form-urlencoded" },
-      body: new URLSearchParams({
-        date: new Date().toLocaleDateString(),
-        name: data.ownerName || "",
-        email: data.email || "",
-        phone: data.phone || "",
-        stage: "Lead - Started"
-      }).toString()
-    }).catch(e => console.warn("Welcome webhook failed:", e));
   };
   
   // Handle survey completion
