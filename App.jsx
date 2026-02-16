@@ -563,11 +563,11 @@ async function sendToZapier(submission) {
       nonEssentialExpenses: expenses
     };
 
-    const response = await fetch(ZAPIER_WEBHOOK_URL, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(payload)
-    });
+    fetch(WEBHOOK_URL, {
+  method: 'POST',
+  headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+  body: new URLSearchParams({ name, email, phone, ... }).toString()
+})
 
     if (response.ok) {
       console.log("✅ Sent to Zapier → Google Sheets");
@@ -2089,7 +2089,7 @@ export default function ConventionValuationApp() {
     fetch(ZAPIER_WEBHOOK_URL, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
+      body: new URLSearchParams({
         date: new Date().toLocaleDateString(),
         name: data.ownerName || "",
         email: data.email || "",
