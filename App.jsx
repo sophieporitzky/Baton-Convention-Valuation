@@ -563,11 +563,11 @@ async function sendToZapier(submission) {
       nonEssentialExpenses: expenses
     };
 
-    fetch(WEBHOOK_URL, {
-  method: 'POST',
-  headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-  body: new URLSearchParams({ name, email, phone, ... }).toString()
-})
+    const response = await fetch(ZAPIER_WEBHOOK_URL, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+      body: new URLSearchParams(payload).toString()
+    });
 
     if (response.ok) {
       console.log("✅ Sent to Zapier → Google Sheets");
@@ -2088,14 +2088,14 @@ export default function ConventionValuationApp() {
     // Send lead capture to Zapier (fire and forget)
     fetch(ZAPIER_WEBHOOK_URL, {
       method: "POST",
-      headers: { "Content-Type": "application/json" },
+      headers: { "Content-Type": "application/x-www-form-urlencoded" },
       body: new URLSearchParams({
         date: new Date().toLocaleDateString(),
         name: data.ownerName || "",
         email: data.email || "",
         phone: data.phone || "",
         stage: "Lead - Started"
-      })
+      }).toString()
     }).catch(e => console.warn("Welcome webhook failed:", e));
   };
   
